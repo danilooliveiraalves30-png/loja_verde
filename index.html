@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Loja Verde - Produtos Naturais e Suplementos</title>
     <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
@@ -14,12 +15,12 @@
         <div class="topo-localizacao">
             <div class="topo-localizacao-texto">
                 <span class="topo-localizacao-label">Entregar em</span>
-                <span class="topo-localizacao-endereco">📍 Sua localização atual</span>
+                <span class="topo-localizacao-endereco"><i class="bi bi-geo-alt" aria-hidden="true"></i> Sua localização atual</span>
             </div>
-            <button class="topo-icone-botao" onclick="navegarPara('carrinho')" aria-label="Carrinho">🛒</button>
+            <button type="button" class="topo-icone-botao" onclick="navegarPara('carrinho')" aria-label="Abrir carrinho"><i class="bi bi-cart" aria-hidden="true"></i></button>
         </div>
 
-        <div class="busca-container busca-container-topo" onclick="navegarPara('busca')">
+        <div class="busca-container busca-container-topo" onclick="abrirBuscaComFoco()">
             <input type="text" class="busca-input" placeholder="Buscar produtos, marcas..." readonly>
         </div>
 
@@ -28,23 +29,35 @@
                 <img src="img/logo.png" alt="Loja Verde" onerror="this.remove()">
             </div>
             <h1>Loja Verde</h1>
-            <p>Olá, bem-vindo! Produtos naturais selecionados para você.</p>
-            <span class="banner-selo">🌿 100% natural</span>
+            <p>Olá, seja bem-vindo! Produtos naturais selecionados para você.</p>
+            <span class="banner-selo"><i class="bi bi-leaf" aria-hidden="true"></i> 100% naturais</span>
         </div>
 
         <h2 class="secao-titulo">Categorias</h2>
         <div class="categorias-lista">
             <div class="categoria-item" onclick="filtrarCategoria('suplementos')">
-                <span class="categoria-circulo">💊</span>
+                <span class="categoria-circulo"><i class="bi bi-capsule" aria-hidden="true"></i></span>
                 <span class="categoria-label">Suplementos</span>
             </div>
             <div class="categoria-item" onclick="filtrarCategoria('naturais')">
-                <span class="categoria-circulo">🌱</span>
+                <span class="categoria-circulo"><i class="bi bi-flower1" aria-hidden="true"></i></span>
                 <span class="categoria-label">Naturais</span>
             </div>
             <div class="categoria-item" onclick="filtrarCategoria('organicos')">
-                <span class="categoria-circulo">🥦</span>
+                <span class="categoria-circulo"><i class="bi bi-tree" aria-hidden="true"></i></span>
                 <span class="categoria-label">Orgânicos</span>
+            </div>
+            <div class="categoria-item" onclick="filtrarCategoria('bebidas')">
+                <span class="categoria-circulo"><i class="bi bi-cup-hot" aria-hidden="true"></i></span>
+                <span class="categoria-label">Bebidas</span>
+            </div>
+            <div class="categoria-item" onclick="filtrarCategoria('snacks')">
+                <span class="categoria-circulo"><i class="bi bi-cookie" aria-hidden="true"></i></span>
+                <span class="categoria-label">Snacks</span>
+            </div>
+            <div class="categoria-item" onclick="filtrarCategoria('vitaminas')">
+                <span class="categoria-circulo"><i class="bi bi-droplet" aria-hidden="true"></i></span>
+                <span class="categoria-label">Vitaminas</span>
             </div>
         </div>
 
@@ -64,17 +77,23 @@
     <!-- ==================== TELA: BUSCA E LISTAGEM ==================== -->
     <div id="tela-busca" class="tela">
         <div class="busca-container">
-            <input type="text" class="busca-input" placeholder="Buscar produtos, marcas..." id="busca-principal" onkeypress="if(event.key==='Enter') realizarBusca(this.value)">
+            <input type="text" class="busca-input" placeholder="Buscar produtos, marcas..." id="busca-principal" oninput="realizarBusca(this.value)">
         </div>
 
         <div class="busca-topo">
-            <span id="termo-busca">proteína vegetal</span>
+            <span id="termo-busca">Produtos recomendados</span>
+            <button type="button" id="limpar-busca" class="btn-limpar-busca hidden" onclick="limparBusca()" aria-label="Limpar pesquisa ou categoria">
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
         </div>
 
         <div class="filtros-lista">
-            <button class="filtro-btn" onclick="aplicarFiltro('filtros')">Filtros</button>
-            <button class="filtro-btn" onclick="aplicarFiltro('menor-preco')">Menor preço</button>
-            <button class="filtro-btn ativo" onclick="aplicarFiltro('promocao')">Promoção</button>
+                        <button type="button" class="filtro-btn ativo" onclick="aplicarFiltro('filtros', this)">Todos</button>
+                        <button type="button" class="filtro-btn" onclick="aplicarFiltro('menor-preco', this)">Menor preço</button>
+                        <button type="button" class="filtro-btn" onclick="aplicarFiltro('maior-preco', this)">Maior preço</button>
+                        <button type="button" class="filtro-btn" onclick="aplicarFiltro('melhor-avaliacao', this)">Melhor avaliação</button>
+                        <button type="button" class="filtro-btn" onclick="aplicarFiltro('ate-50', this)">Até R$ 50</button>
+                        <button type="button" class="filtro-btn" onclick="aplicarFiltro('promocao', this)">Promoção</button>
         </div>
 
         <div id="resultados-busca">
@@ -85,8 +104,8 @@
     <!-- ==================== TELA: DETALHE DO PRODUTO ==================== -->
     <div id="tela-produto" class="tela tela-produto">
         <div class="produto-detalhe-imagem-wrap">
-            <button class="btn-flutuante btn-voltar" onclick="voltarDoProduto()" aria-label="Voltar">←</button>
-            <button class="btn-flutuante btn-favorito" onclick="alternarFavorito(this)" aria-label="Favoritar">♡</button>
+            <button type="button" class="btn-flutuante btn-voltar" onclick="voltarDoProduto()" aria-label="Voltar">←</button>
+            <button type="button" class="btn-flutuante btn-favorito" onclick="alternarFavorito(this)" aria-label="Adicionar aos favoritos"><i class="bi bi-heart" aria-hidden="true"></i></button>
             <div class="produto-detalhe-imagem" id="detalhe-imagem"></div>
         </div>
 
@@ -96,7 +115,7 @@
             <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
                 <span class="produto-detalhe-preco" id="detalhe-preco">R$ 149,90</span>
                 <div class="produto-detalhe-avaliacao">
-                    <span class="estrela">★</span>
+                    <i class="bi bi-star estrela" aria-hidden="true"></i>
                     <span id="detalhe-avaliacao">4.8 (231)</span>
                 </div>
             </div>
@@ -170,9 +189,9 @@
 
         <div class="barra-adicionar-fixa">
             <div class="quantidade-controle">
-                <button class="quantidade-btn" onclick="alterarQuantidade(-1)">−</button>
+                <button type="button" class="quantidade-btn" onclick="alterarQuantidade(-1)" aria-label="Diminuir quantidade">−</button>
                 <span class="quantidade-valor" id="quantidade-valor">1</span>
-                <button class="quantidade-btn" onclick="alterarQuantidade(1)">+</button>
+                <button type="button" class="quantidade-btn" onclick="alterarQuantidade(1)" aria-label="Aumentar quantidade">+</button>
             </div>
             <button class="btn-adicionar" onclick="adicionarAoCarrinho()">
                 Adicionar • <span id="btn-adicionar-preco">R$ 0,00</span>
@@ -205,7 +224,7 @@
             </div>
         </div>
 
-        <button class="btn-finalizar" onclick="finalizarPedido()">Finalizar pedido</button>
+        <button type="button" class="btn-finalizar" onclick="finalizarPedido()">Finalizar pedido</button>
     </div>
 
     <!-- ==================== TELA: ACOMPANHAR ENTREGA ==================== -->
@@ -239,7 +258,7 @@
         </div>
 
         <div class="entregador-card">
-            <div class="entregador-avatar"><img src="img/entregadores/carlos.jpg" alt="Entregador Carlos" onerror="this.remove()"></div>
+            <div class="entregador-avatar"><img src="img/entregadores/carlos.jpg" alt="Entregador Carlos" onerror="this.nextElementSibling.style.display='inline-block'; this.remove()"><i class="bi bi-bicycle avatar-fallback" aria-hidden="true"></i></div>
             <div>
                 <h4>Entregador: Carlos</h4>
                 <p>Contato disponível no app</p>
@@ -256,19 +275,19 @@
     <!-- ==================== NAVEGAÇÃO INFERIOR ==================== -->
     <nav class="navegacao-inferior">
         <a class="nav-item ativo" onclick="navegarPara('inicio')">
-            <span class="nav-icone">🏠</span>
+            <span class="nav-icone"><i class="bi bi-house" aria-hidden="true"></i></span>
             <span>Início</span>
         </a>
         <a class="nav-item" onclick="navegarPara('busca')">
-            <span class="nav-icone">🔍</span>
+            <span class="nav-icone"><i class="bi bi-search" aria-hidden="true"></i></span>
             <span>Buscar</span>
         </a>
         <a class="nav-item" onclick="navegarPara('carrinho')">
-            <span class="nav-icone">🛒</span>
+            <span class="nav-icone"><i class="bi bi-cart" aria-hidden="true"></i></span>
             <span>Carrinho</span>
         </a>
         <a class="nav-item" onclick="navegarPara('pedidos')">
-            <span class="nav-icone">📦</span>
+            <span class="nav-icone"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
             <span>Pedidos</span>
         </a>
     </nav>

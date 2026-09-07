@@ -19,15 +19,16 @@ function abrirProduto(id) {
 
     // Atualizar tabela nutricional
     const tabelaBody = document.querySelector('#tabela-nutricional tbody');
-    if (produto.nutricional && Array.isArray(produto.nutricional)) {
-        tabelaBody.innerHTML = produto.nutricional.map(item => `
+    const informacoesNutricionais = produto.nutricional && produto.nutricional.length
+        ? produto.nutricional
+        : [{ nutriente: 'Informação nutricional', por100g: 'Consulte a embalagem', vd: '-' }];
+    tabelaBody.innerHTML = informacoesNutricionais.map(item => `
             <tr>
                 <td>${item.nutriente}</td>
                 <td>${item.por100g}</td>
                 <td>${item.vd}</td>
             </tr>
         `).join('');
-    }
 
     // Atualizar descrição
     document.getElementById('detalhe-descricao').textContent = produto.descricao || 'Produto natural de alta qualidade.';
@@ -36,17 +37,17 @@ function abrirProduto(id) {
     const listaBeneficios = document.getElementById('lista-beneficios');
     if (produto.beneficios && Array.isArray(produto.beneficios)) {
         listaBeneficios.innerHTML = produto.beneficios.map(beneficio => `
-            <li>${beneficio}</li>
+            <li><i class="bi bi-check2" aria-hidden="true"></i>${beneficio}</li>
         `).join('');
     } else {
-        listaBeneficios.innerHTML = '<li>Produto natural de alta qualidade.</li>';
+        listaBeneficios.innerHTML = '<li><i class="bi bi-check2" aria-hidden="true"></i>Produto natural de alta qualidade.</li>';
     }
 
     // Resetar botão de favorito
     const btnFavorito = document.querySelector('.btn-favorito');
     if (btnFavorito) {
         btnFavorito.classList.remove('favorito');
-        btnFavorito.textContent = '♡';
+        btnFavorito.innerHTML = '<i class="bi bi-heart" aria-hidden="true"></i>';
     }
 
     // Mostrar tela de produto (não está na navegação)
@@ -65,7 +66,9 @@ function voltarDoProduto() {
 
 function alternarFavorito(botao) {
     const ativo = botao.classList.toggle('favorito');
-    botao.textContent = ativo ? '♥' : '♡';
+    botao.innerHTML = ativo
+        ? '<i class="bi bi-heart-fill" aria-hidden="true"></i>'
+        : '<i class="bi bi-heart" aria-hidden="true"></i>';
 }
 
 function atualizarPrecoBotaoAdicionar() {
