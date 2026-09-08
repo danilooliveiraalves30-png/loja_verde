@@ -8,7 +8,7 @@ Aplicação de e-commerce para produtos naturais e suplementos.
 - `backend/` - API REST com Node.js/Express
 - `database/` - Scripts SQL e configuração
 - `api/` - Documentação OpenAPI
-- `tests/` - Testes automatizados
+
 
 ## Instalação
 
