@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  title: Loja Verde API
+  description: API da Loja Verde - Produtos Naturais e Suplementos
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /produtos:
+    get:
+      summary: Listar todos os produtos
+      responses:
+        '200':
+          description: Lista de produtos
+
+  /produtos/buscar:
+    get:
+      summary: Buscar produtos
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados da busca
+
+  /carrinho:
+    get:
+      summary: Listar carrinho
+      responses:
+        '200':
+          description: Itens do carrinho
+
+  /carrinho/adicionar:
+    post:
+      summary: Adicionar item ao carrinho
+      responses:
+        '200':
+          description: Item adicionado
+
+  /pedidos:
+    get:
+      summary: Listar pedidos
+      responses:
+        '200':
+          description: Lista de pedidos
+
+    post:
+      summary: Criar novo pedido
+      responses:
+        '201':
+          description: Pedido criado
